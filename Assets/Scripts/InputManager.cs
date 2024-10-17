@@ -21,11 +21,11 @@ public class InputManager : MonoBehaviour
     {
         Instance = this;
         playerInputMap = new PlayerInputMap();
-        playerInputMap.Enable();
     }
 
     private void Start()
     {
+        playerInputMap.Enable();
         playerInputMap.Walking.Interact.performed += Interact_performed;
     }
 
@@ -33,9 +33,13 @@ public class InputManager : MonoBehaviour
     {
         OnInteractInputReceived?.Invoke(this, EventArgs.Empty);
     }
-
-    public PlayerInputMap GetPlayerInputMap()
+    public Vector2 GetMoveInputValues()
     {
-        return playerInputMap;
+        return playerInputMap.Walking.Move.ReadValue<Vector2>();
+    }
+    
+    public Vector2 GetLookDirection()
+    {
+        return playerInputMap.Walking.Look.ReadValue<Vector2>();
     }
 }

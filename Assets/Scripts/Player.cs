@@ -4,26 +4,46 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+
+    private CharacterController playerController;
+    [SerializeField] private Transform playerCamera;
     private float moveSpeed = 5f;
-    private float playerHeight = 2f;
-    private float playerRadius = 1f;
+    private float xRotation = 0;
+    private float gravity = -9.8f;
+    private float ySensitivity = 3f;
+    private float xSensitivity = 3f;
+
     private void HandleMovement()
     {
-        Vector2 moveInput = InputManager.Instance.GetPlayerInputMap().Walking.Move.ReadValue<Vector2>();
-        RaycastHit hit;
-        Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y);
-        if(!Physics.CapsuleCast(transform.position, new Vector3(transform.position.x, transform.position.y + playerHeight, transform.position.z), playerRadius, moveDirection, out hit, 5))
+        Vector2 moveDirection = InputManager.Instance.GetMoveInputValues();
+        Vector3 moveValue = new Vector3(moveDirection.x * moveSpeed * Time.deltaTime, 0, moveDirection.y * moveSpeed * Time.deltaTime);
+
+        if (!playerController.isGrounded)
         {
-            transform.position += moveDirection * moveSpeed * Time.deltaTime;
+            moveValue.y += gravity * Time.deltaTime;
         }
+        playerController.Move(transform.TransformDirection(moveValue));
     }
+
 
     private void Start()
     {
+        playerController = GetComponent<CharacterController>();
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()
     {
         HandleMovement();
+        HandleLookRotation();
+    }
+    private void HandleLookRotation()
+    {
+        Debug.Log(InputManager.Instance.GetLookDirection());
+        transform.eulerAngles = new Vector3(0, playerCamera.transform.eulerAngles.y, 0);
+        Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
+        Debug.DrawRay(transform.position, forward, Color.green);
+        forward = playerCamera.TransformDirection(Vector3.forward) * 10;
+        Debug.DrawRay(playerCamera.position, forward, Color.green);
     }
 }

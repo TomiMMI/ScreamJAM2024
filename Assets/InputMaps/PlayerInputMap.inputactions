@@ -19,9 +19,18 @@
                     "type": "Button",
                     "id": "d953dbdc-885f-4995-8dfb-cfd35311318e",
                     "expectedControlType": "",
-                    "processors": "",
+                    "processors": "Scale",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Look",
+                    "type": "Value",
+                    "id": "2fa55bdb-6181-4deb-a2fd-a2c6cbf53f5b",
+                    "expectedControlType": "Vector2",
+                    "processors": "ScaleVector2(x=0.05,y=0.05)",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -143,6 +152,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "feb696c4-3612-4a49-b7c8-ee78d004e2fd",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
