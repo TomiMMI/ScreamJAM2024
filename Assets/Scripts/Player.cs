@@ -17,10 +17,13 @@ public class Player : MonoBehaviour
     {
         Vector2 moveDirection = InputManager.Instance.GetMoveInputValues();
         Vector3 moveValue = new Vector3(moveDirection.x * moveSpeed * Time.deltaTime, 0, moveDirection.y * moveSpeed * Time.deltaTime);
-
-        if (!playerController.isGrounded)
-        {
+        RaycastHit hitInfo;
+        Physics.Raycast(transform.position, Vector3.down, out hitInfo, 0.1f);
+        Debug.DrawRay(transform.position, Vector3.down * 0.1f,Color.green);
+        if (hitInfo.transform == null){
+            Debug.Log("a");
             moveValue.y += gravity * Time.deltaTime;
+
         }
         playerController.Move(transform.TransformDirection(moveValue));
     }
@@ -39,7 +42,6 @@ public class Player : MonoBehaviour
     }
     private void HandleLookRotation()
     {
-        Debug.Log(InputManager.Instance.GetLookDirection());
         transform.eulerAngles = new Vector3(0, playerCamera.transform.eulerAngles.y, 0);
         Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
         Debug.DrawRay(transform.position, forward, Color.green);
