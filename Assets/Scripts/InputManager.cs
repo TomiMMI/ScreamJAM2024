@@ -9,13 +9,8 @@ public class InputManager : MonoBehaviour
 
     private PlayerInputMap playerInputMap;
 
-    public event EventHandler<OnMoveInputReceivedEventArgs> OnMoveInputReceived;
-    public class OnMoveInputReceivedEventArgs : EventArgs
-    {
-        public Vector2 moveValue;
-    }
-
     public event EventHandler OnInteractInputReceived;
+    public event EventHandler OnInteractAlternateInputReceived;
 
     void Awake()
     {
@@ -27,15 +22,25 @@ public class InputManager : MonoBehaviour
     private void Start()
     {
         playerInputMap.Walking.Interact.performed += Interact_performed;
+        playerInputMap.Walking.InteractAlternate.performed += InteractAlternate_performed;
+    }
+
+    private void InteractAlternate_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        OnInteractAlternateInputReceived?.Invoke(this, EventArgs.Empty);
     }
 
     private void Interact_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         OnInteractInputReceived?.Invoke(this, EventArgs.Empty);
     }
-
-    public PlayerInputMap GetPlayerInputMap()
+    public Vector2 GetMoveInputValues()
     {
-        return playerInputMap;
+        return playerInputMap.Walking.Move.ReadValue<Vector2>();
+    }
+    
+    public Vector2 GetLookDirection()
+    {
+        return playerInputMap.Walking.Look.ReadValue<Vector2>();
     }
 }
